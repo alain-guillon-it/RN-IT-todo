@@ -8,8 +8,13 @@ import {
   Button,
   FlatList,
   ScrollView,
+  ImageBackground,
 } from "react-native";
 import { useState } from "react";
+
+const image = {
+  uri: "https://images.unsplash.com/photo-1541140134513-85a161dc4a00?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JleSUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80",
+};
 
 export default function App() {
   // STEP-2 & 3
@@ -52,78 +57,80 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        {/* STEP - 2 ET 3 */}
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView}>
+          {/* STEP - 4 */}
 
-        <Text
-          style={{
-            fontSize: 32,
-            textAlign: "center",
-            marginVertical: 16,
-          }}
-        >
-          My Todo List
-        </Text>
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <TextInput
-            onChangeText={(text) => setNewTodo(text)}
-            value={newTodo}
-            style={styles.input}
-            placeholder="Add a new todo"
-          ></TextInput>
-
-          <Button
-            title="Add"
+          <Text
             style={{
-              width: "20%",
+              fontSize: 32,
+              textAlign: "center",
+              marginVertical: 16,
             }}
-            onPress={handleClickTodo}
-          ></Button>
-        </View>
+          >
+            My Todo List
+          </Text>
 
-        <View
-          style={{
-            marginVertical: 16,
-          }}
-        >
-          {todo && (
-            <FlatList
-              data={todo}
-              renderItem={({ item, index }) => (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginVertical: 5,
-                    padding: 8,
-                    borderWidth: 2,
-                    border: 1,
-                  }}
-                >
-                  <Text style={styles.item}>{item}</Text>
-                  <Button
-                    title="X"
-                    color="crimson"
-                    style={{ elevation: 5 }}
-                    onPress={() => handleDeleteTodo(index)}
-                  ></Button>
-                </View>
-              )}
-            ></FlatList>
-          )}
-        </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <TextInput
+              onChangeText={(text) => setNewTodo(text)}
+              value={newTodo}
+              style={styles.input}
+              placeholder="Add a new todo"
+            ></TextInput>
 
-        <StatusBar style="auto" />
-      </ScrollView>
-    </SafeAreaView>
+            <Button
+              title="Add"
+              style={{
+                width: "20%",
+              }}
+              onPress={handleClickTodo}
+            ></Button>
+          </View>
+
+          <View
+            style={{
+              marginVertical: 16,
+            }}
+          >
+            {todo && (
+              <FlatList
+                data={todo}
+                renderItem={({ item, index }) => (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginVertical: 5,
+                      padding: 8,
+                      borderWidth: 2,
+                      border: 1,
+                    }}
+                  >
+                    <Text style={styles.item}>{item}</Text>
+                    <Button
+                      title="X"
+                      color="crimson"
+                      style={{ elevation: 5 }}
+                      onPress={() => handleDeleteTodo(index)}
+                    ></Button>
+                  </View>
+                )}
+              ></FlatList>
+            )}
+          </View>
+
+          <StatusBar style="auto" />
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
@@ -139,6 +146,10 @@ const styles = StyleSheet.create({
   },
   textBold: {
     fontWeight: 900,
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
   },
   input: {
     height: 40,
