@@ -11,6 +11,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { useState } from "react";
+import Todo from "./Components/Todo";
 
 const image = {
   uri: "https://images.unsplash.com/photo-1541140134513-85a161dc4a00?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JleSUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80",
@@ -103,25 +104,32 @@ export default function App() {
               <FlatList
                 data={todo}
                 renderItem={({ item, index }) => (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginVertical: 5,
-                      padding: 8,
-                      borderWidth: 2,
-                      border: 1,
-                    }}
-                  >
-                    <Text style={styles.item}>{item}</Text>
-                    <Button
-                      title="X"
-                      color="crimson"
-                      style={{ elevation: 5 }}
-                      onPress={() => handleDeleteTodo(index)}
-                    ></Button>
-                  </View>
+                  <Todo
+                    i={index}
+                    todo={item}
+                    handleDeleteTodoParent={(index) => handleDeleteTodo(index)}
+                  />
+
+                  // <View
+                  //   style={{
+                  //     flexDirection: "row",
+                  //     justifyContent: "space-between",
+                  //     alignItems: "center",
+                  //     marginVertical: 5,
+                  //     padding: 8,
+                  //     borderWidth: 2,
+                  //     border: 1,
+                  //   }}
+                  // >
+
+                  //   <Text style={styles.item}>{item}</Text>
+                  //   <Button
+                  //     title="X"
+                  //     color="crimson"
+                  //     style={{ elevation: 5 }}
+                  //     onPress={() => handleDeleteTodo(index)}
+                  //   ></Button>
+                  // </View>
                 )}
               ></FlatList>
             )}
