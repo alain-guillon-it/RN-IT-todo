@@ -1,22 +1,29 @@
 import { useState } from 'react';
+import { View, Text, StyleSheet, Pressable, Alert, Modal, TextInput } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
-    View,
-    Text,
-    Button,
-    StyleSheet,
-    Pressable,
-    Alert,
-    Modal,
-    Separator,
-} from 'react-native';
+    faClipboardList,
+    faPenToSquare,
+    faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 
-function Todo({ todo, i, handleDeleteTodoParent }) {
-    // Création de la modal
-    const [modalVisible, setModalVisible] = useState(false);
+function Todo({ todo, i, handleDeleteTodoParent, handleClickTodoParent }) {
+    // Création des modals
+    const [modalEditVisible, setModalEditVisible] = useState(false);
+    const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
 
+    // Edite Todo
+    const [editedTodo, setEditedTodo] = useState(todo);
+
+    // CONFIRMATION SUPPRESSION D'UNE TÂCHE
     function deleteThisTodo(index) {
         handleDeleteTodoParent(index);
-        setModalVisible(!modalVisible);
+        setModalDeleteVisible(!modalDeleteVisible);
+    }
+
+    function editThisTodo(index) {
+        handleClickTodoParent(editedTodo);
+        setModalEditVisible(!modalEditVisible);
     }
 
     return (
@@ -34,29 +41,86 @@ function Todo({ todo, i, handleDeleteTodoParent }) {
                     opacity: 0.9,
                 }}
             >
+                <FontAwesomeIcon icon={faClipboardList} size={32} />
                 <Text style={styles.item}>{todo}</Text>
-                <Pressable
-                    style={[styles.button, styles.buttonOpen]}
-                    onPress={() => setModalVisible(true)}
-                >
-                    <Text style={styles.textStyle}>Supprimer</Text>
-                </Pressable>
+                <View>
+                    {/* Supprimer */}
+                    <Pressable
+                        style={[styles.button, styles.buttonOpenDelete]}
+                        onPress={() => setModalDeleteVisible(true)}
+                    >
+                        <Text style={styles.textStyle}>
+                            <FontAwesomeIcon icon={faTrash} style={{ color: 'white' }} />
+                        </Text>
+                    </Pressable>
+
+                    {/* Editer */}
+                    <Pressable
+                        style={[styles.button, styles.buttonOpenEdit]}
+                        onPress={() => setModalEditVisible(true)}
+                    >
+                        <Text style={styles.textStyle}>
+                            <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                style={{ color: 'white' }}
+                            />
+                        </Text>
+                    </Pressable>
+                </View>
             </View>
 
+            {/* Modal EDIT */}
             <View style={styles.centeredView}>
                 <Modal
-                    animationType='sidel'
+                    animationType='slide'
                     transparent={true}
-                    visible={modalVisible}
+                    visible={modalEditVisible}
                     onRequestClose={() => {
                         Alert.alert('Modal has been closed.');
-                        setModalVisible(!modalVisible);
+                        setModalEditVisible(!modalEditVisible);
                     }}
                 >
                     <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>
-                                Souhaitez-vous supprimer votre tâche ?
+                        <View style={[styles.modalView, styles.modalViewEdit]}>
+                            <Text style={styles.modalTextEdit}>Mise à jour</Text>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                }}
+                            >
+                                <TextInput
+                                    onChangeText={(text) => setEditedTodo(text)}
+                                    value={editedTodo}
+                                    style={styles.inputAdd}
+                                ></TextInput>
+                                <Pressable
+                                    style={[styles.button]}
+                                    onPress={() => editThisTodo(i)}
+                                >
+                                    <Text style={{ color: 'white' }}>confirmer</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+
+            {/* Modal DELETE */}
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={modalDeleteVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setModalDeleteVisible(!modalDeleteVisible);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <View style={[styles.modalView, styles.modalViewDelete]}>
+                            <Text style={styles.modalTextEdit}>
+                                Souhaitez-vous réellement supprimer votre tâche ?
                             </Text>
                             <View
                                 style={{
@@ -66,7 +130,9 @@ function Todo({ todo, i, handleDeleteTodoParent }) {
                             >
                                 <Pressable
                                     style={[styles.button, styles.buttonClose]}
-                                    onPress={() => setModalVisible(!modalVisible)}
+                                    onPress={() =>
+                                        setModalDeleteVisible(!modalDeleteVisible)
+                                    }
                                 >
                                     <Text style={styles.textStyle}>Annuler</Text>
                                 </Pressable>
@@ -95,9 +161,9 @@ export default Todo;
 const styles = StyleSheet.create({
     item: {
         fontSize: 16,
-        height: 35,
+        height: 60,
         flex: 1,
-        marginRight: 10,
+        marginHorizontal: 10,
         padding: 5,
         alignItems: 'center',
         justifyContent: 'center',
@@ -110,8 +176,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalView: {
-        margin: 20,
-        backgroundColor: 'grey',
+        margin: 15,
+        opacity: 0.9,
         borderRadius: 5,
         padding: 35,
         alignItems: 'center',
@@ -124,30 +190,57 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
+    modalViewEdit: {
+        backgroundColor: '#E2C290',
+    },
+    modalViewDelete: {
+        backgroundColor: '#F0386B',
+    },
     button: {
         borderRadius: 5,
         padding: 10,
-        elevation: 5,
+        elevation: 1,
     },
-    buttonOpen: {
-        backgroundColor: 'crimson',
+    buttonOpenDelete: {
+        backgroundColor: '#F0386B',
+    },
+    buttonOpenEdit: {
+        backgroundColor: '#E2C290',
     },
     buttonClose: {
-        backgroundColor: '#A1A1A1',
-		marginRight: 10
+        backgroundColor: '#616161',
+        marginRight: 10,
     },
     buttonConfirm: {
-        backgroundColor: 'crimson',
-		marginLeft: 10
+        backgroundColor: '#6B2D5C',
+        marginLeft: 10,
     },
     textStyle: {
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
     },
-
-    modalText: {
+    modalTextEdit: {
         marginBottom: 15,
         textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: 'black',
+    },
+    modalTextDelete: {
+        marginBottom: 15,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: 'black',
+    },
+    inputAdd: {
+        height: 40,
+        borderWidth: 2,
+        borderColor: 'black',
+        padding: 10,
+        flex: 1,
+        marginRight: 10,
+        backgroundColor: 'white',
     },
 });
