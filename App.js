@@ -12,9 +12,10 @@ import {
 } from "react-native";
 import { useState } from "react";
 import Todo from "./Components/Todo";
+import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 const image = {
-  uri: "https://images.unsplash.com/photo-1541140134513-85a161dc4a00?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JleSUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80",
+  uri: "https://e0.pxfuel.com/wallpapers/1023/612/desktop-wallpaper-nature-minimalist-dark-iphone-2160x3840-mobile-nature.jpg",
 };
 
 export default function App() {
@@ -68,11 +69,13 @@ export default function App() {
               fontSize: 32,
               textAlign: "center",
               marginVertical: 16,
+              color: "white",
             }}
           >
             My Todo List
           </Text>
 
+          {/* PARTIE AJOUT D'UNE TÂCHE */}
           <View
             style={{
               flexDirection: "row",
@@ -82,19 +85,28 @@ export default function App() {
             <TextInput
               onChangeText={(text) => setNewTodo(text)}
               value={newTodo}
-              style={styles.input}
+              style={styles.inputAdd}
               placeholder="Add a new todo"
             ></TextInput>
 
-            <Button
-              title="Add"
+            <Pressable
+              android_ripple={{
+                color: "blue",
+                radius: 50,
+              }}
               style={{
                 width: "20%",
+                backgroundColor: "skyblue",
+                alignItems: "center",
+                paddingTop: 9,
               }}
               onPress={handleClickTodo}
-            ></Button>
+            >
+              <Text style={styles.add}>Coucou</Text>
+            </Pressable>
           </View>
 
+          {/* PARTIE AFFICHAGE DE LA LISTE */}
           <View
             style={{
               marginVertical: 16,
@@ -109,27 +121,6 @@ export default function App() {
                     todo={item}
                     handleDeleteTodoParent={(index) => handleDeleteTodo(index)}
                   />
-
-                  // <View
-                  //   style={{
-                  //     flexDirection: "row",
-                  //     justifyContent: "space-between",
-                  //     alignItems: "center",
-                  //     marginVertical: 5,
-                  //     padding: 8,
-                  //     borderWidth: 2,
-                  //     border: 1,
-                  //   }}
-                  // >
-
-                  //   <Text style={styles.item}>{item}</Text>
-                  //   <Button
-                  //     title="X"
-                  //     color="crimson"
-                  //     style={{ elevation: 5 }}
-                  //     onPress={() => handleDeleteTodo(index)}
-                  //   ></Button>
-                  // </View>
                 )}
               ></FlatList>
             )}
@@ -149,6 +140,10 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
   },
+  add: {
+    flex: 1,
+    color: "white",
+  },
   redColor: {
     color: "crimson",
   },
@@ -159,13 +154,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  input: {
+  inputAdd: {
     height: 40,
-    margin: 2,
-    borderWidth: 1,
+    borderWidth: 3,
+    borderColor: "black",
     padding: 10,
     flex: 1,
     marginRight: 10,
+    backgroundColor: "white",
   },
   row: {
     flexDirection: "row",
