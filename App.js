@@ -2,197 +2,331 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
-    SafeAreaView,
-    StyleSheet,
-    TextInput,
-    Text,
-    View,
-    FlatList,
-    ScrollView,
-    ImageBackground,
-    Pressable,
-    Keyboard,
+	SafeAreaView,
+	StyleSheet,
+	Text,
+	View,
+	Platform,
+	ImageBackground,
+	TextInput,
+	Pressable,
+	FlatList,
+	Keyboard,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+	faPlus,
+	faClipboardList,
+	faPenToSquare,
+	faTrash,
+} from '@fortawesome/free-solid-svg-icons';
+import Task from './Components/Task';
 
-// Composants personnel
-import Todo from './Components/Todo';
-
-// Image de fond de l'application
-const image = {
-    uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/crystal_background.jpg',
+const colors = {
+	black: '#333333',
+	white: '#F1F1F1',
+	blue: '#0000FF',
+	red: 'salmon',
+	gold: '#FFD700',
+	transparent: 'transparent',
 };
+
+// Image Background
+const backgroundUI = {
+	uri: 'https://diapogram.com/upload/2018/04/10/20180410133409-7ff8c878.jpg',
+};
+
+// Tasks
+const defaultTaskList = [
+	'Faire les courses',
+	'Aller à la salle de sport 3 fois par semaine',
+	'Monter à plus de 5000m d altitude',
+	'Acheter mon premier appartement',
+	'Perdre 25 kgs',
+	'Gagner en productivité',
+	'Apprendre un nouveau langage',
+	'Faire une mission en freelance',
+	'Organiser un meetup autour de la tech',
+	'Faire un triathlon',
+	'Apprendre React Native',
+	'Apprendre NodeJS',
+	'Apprendre React',
+	'Apprendre NextJS',
+	'Apprendre Symfony',
+];
 
 // STEP 5
 export default function App() {
-    // Liste des tâches (Tableau initialisé)
-    const [todo, setTodo] = useState([
-        'Faire les courses',
-        'Aller à la salle de sport 3 fois par semaine',
-        'Monter à plus de 5000m d altitude',
-        'Acheter mon premier appartement',
-        'Perdre 25 kgs',
-        'Gagner en productivité',
-        'Apprendre un nouveau langage',
-        'Faire une mission en freelance',
-        'Organiser un meetup autour de la tech',
-        'Faire un triathlon',
-        'Apprendre React Native',
-        'Apprendre NodeJS',
-        'Apprendre React',
-        'Apprendre NextJS',
-        'Apprendre Symfony',
-    ]);
+	// Liste des tâches
+	const [taskList, setTaskList] = useState([...defaultTaskList]);
 
-    // Edition de l'input texte
-    const [newTodo, setNewTodo] = useState('');
+	// Saisie utilisateur
+	const [input, setInput] = useState('');
 
-    // Ajout de la TODO
-    function handleClickTodo() {
-        if (newTodo.trim() === '') {
-            return;
-        }
-        setTodo([...todo, newTodo]);
-        setNewTodo('');
-        Keyboard.dismiss();
-    }
+	// Ajout d'une nouvelle tâche
+	const handleClickAddNewTask = () => {
+		// Si la chaîne de caractère saisie est vide on ne fait rien
+		if (input.trim() == '') return;
+		// Mise à jour de la taskList
+		setTaskList([...taskList, input]);
+		setInput('');
+		// Fermer le clavier une fois validé
+		Keyboard.dismiss();
+	};
 
-    // Suppression d'une Todo selon son index
-    function handleDeleteTodo(index) {
-        const newTodos = [...todo];
-        newTodos.splice(index, 1);
-        setTodo(newTodos);
-    }
+	// Éditer une tâche
+	const editOneTaskByTheIndex = (index, updateInput) => {
+		const info = taskList.filter((elt) => taskList[index] == elt);
+		console.log(info);
+	};
 
-    return (
-        <ImageBackground source={image} resizeMode='cover' style={styles.image}>
-            <SafeAreaView style={styles.container}>
-                {/* PARTIE Titre + Formulaire d'ajout */}
-                <View>
-                    <Text
-                        style={{
-                            fontSize: 32,
-                            textAlign: 'center',
-                            marginVertical: 16,
-                            color: 'white',
-                        }}
-                    >
-                        My Todo List
-                    </Text>
+	// Suppression d'une Task selon son index
+	const deleteOneTaskByIndex = (indexPositionTaskList) => {
+		const newTaskList = [...taskList];
+		newTaskList.splice(indexPositionTaskList, 1);
+		setTaskList(newTaskList);
+	};
 
-                    {/* PARTIE AJOUT D'UNE TÂCHE */}
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <TextInput
-                            onChangeText={(text) => setNewTodo(text)}
-                            value={newTodo}
-                            style={styles.inputAdd}
-                            placeholder='Add a new todo'
-                        ></TextInput>
+	return (
+		<>
+			{/* BACKGROUND APP */}
+			<ImageBackground
+				source={backgroundUI}
+				resizeMode='cover'
+				style={styles.backgroundImage}
+				alt="un image en fond d'écran"
+			>
+				<SafeAreaView style={styles.body}>
+					{/* HEADER */}
+					<View style={[styles.header]}>
+						{/* H1 */}
+						<Text style={styles.h1}>IT-Task Manager</Text>
+						{/* INPUT TEXT + BTN */}
+						<View style={styles.row}>
+							{/* INPUT ADD TASK */}
+							<TextInput
+								onChangeText={(inputNewText) => setInput(inputNewText)}
+								value={input}
+								style={styles.addInput}
+								placeholder='Add a new task here...'
+							></TextInput>
+							{/* BUTTON + ICON FONT_AWESOME */}
+							<Pressable
+								style={[styles.btn, styles.btnInfo, styles.btnLarge]}
+								android_ripple={{
+									color: colors.gold,
+									radius: 50,
+								}}
+								onPress={handleClickAddNewTask}
+							>
+								{/* ICON */}
+								<Text>
+									<FontAwesomeIcon
+										icon={faPlus}
+										size={24}
+										style={{
+											color: colors.white,
+										}}
+									/>
+								</Text>
+							</Pressable>
+						</View>
+					</View>
 
-                        <Pressable
-                            android_ripple={{
-                                color: 'blue',
-                                radius: 50,
-                            }}
-                            style={{
-                                width: '20%',
-                                borderWidth: 2,
-                                borderColor: 'black',
-                                backgroundColor: 'skyblue',
-                                alignItems: 'center',
-                                paddingTop: 9,
-                            }}
-                            onPress={handleClickTodo}
-                        >
-                            <Text style={styles.add}>
-                                <FontAwesomeIcon
-                                    icon={faPlus}
-                                    size={20}
-                                    style={{
-                                        color: 'white',
-                                    }}
-                                />
-                            </Text>
-                        </Pressable>
-                    </View>
-                </View>
+					{/* MAIN */}
+					<View style={[styles.main]}>
+						{taskList && (
+							<FlatList
+								data={taskList}
+								style={{
+									backgroundColor: colors.transparent,
+									opacity: 0.9,
+								}}
+								ListHeaderComponent={
+									<Text style={{ textAlign: 'center', fontSize: 24 }}>
+										Liste des tâches à réaliser
+									</Text>
+								}
+								ListHeaderComponentStyle={{
+									backgroundColor: colors.gold,
+									paddingVertical: 4,
+									color: colors.black,
+								}}
+								renderItem={({ item, index }) => (
+									<Task
+										i={index}
+										task={item}
+										handleDeteleOneTaskByTheParent={(index) =>
+											deleteOneTaskByIndex(index)
+										}
+										editOneTaskByTheParent={(index) =>
+											editOneTaskByTheIndex(index)
+										}
+									/>
+								)}
+							></FlatList>
+						)}
+					</View>
 
-                {/* PARTIE pour scroller */}
-                <ScrollView>
-                    {/* PARTIE AFFICHAGE DE LA LISTE */}
-                    <View
-                        style={{
-                            marginVertical: 16,
-                        }}
-                    >
-                        {todo && (
-                            <FlatList
-                                data={todo}
-                                renderItem={({ item, index }) => (
-                                    <Todo
-                                        i={index}
-                                        todo={item}
-                                        handleDeleteTodoParent={(index) =>
-                                            handleDeleteTodo(index)
-                                        }
-                                        handleClickTodoParent={(text) =>
-                                            handleClickTodo(text)
-                                        }
-                                    />
-                                )}
-                            ></FlatList>
-                        )}
-                    </View>
+					{/* FOOTER */}
+					<View style={[styles.footer]}>
+						<Text style={styles.h2}>By Alain GUILLON</Text>
+						{/* PLATEFORME */}
+						<View
+							style={[
+								styles.row,
+								styles.justifyBetween,
+								{ paddingHorizontal: 16 },
+							]}
+						>
+							{/* PLATEFORME */}
+							<Text style={[styles.strong, styles.textDanger]}>
+								Plateforme:{'   '}
+								{Platform.OS == 'android' && (
+									<Text style={[styles.em, styles.textLight]}>
+										Androïde
+									</Text>
+								)}
+								{Platform.OS == 'ios' && (
+									<Text style={[styles.em, styles.textLight]}>IOS</Text>
+								)}
+								{Platform.OS == 'macos' && (
+									<Text style={[styles.em, styles.textLight]}>
+										MacOS
+									</Text>
+								)}
+								{Platform.OS == 'web' && (
+									<Text style={[styles.em, styles.textLight]}>Web</Text>
+								)}
+								{Platform.OS == 'windows' && (
+									<Text style={[styles.em, styles.textLight]}>
+										Windows
+									</Text>
+								)}
+							</Text>
 
-                    <StatusBar style='auto' />
-                </ScrollView>
-            </SafeAreaView>
-        </ImageBackground>
-    );
+							{/* VERSION */}
+							<Text style={[styles.strong, styles.textDanger]}>
+								Version:{'   '}
+								<Text style={[styles.em, styles.textLight]}>
+									{Platform.Version}
+								</Text>
+							</Text>
+						</View>
+					</View>
+				</SafeAreaView>
+				{/* STATUS BAR WITH A WHITE COLOR SELECTED */}
+				<StatusBar style='light' />
+			</ImageBackground>
+		</>
+	);
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 40,
-        paddingRight: 20,
-        paddingLeft: 20,
-    },
-    add: {
-        flex: 1,
-        color: 'white',
-    },
-    image: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    inputAdd: {
-        height: 40,
-        borderWidth: 2,
-        borderColor: 'black',
-        padding: 10,
-        flex: 1,
-        marginRight: 10,
-        backgroundColor: 'white',
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    item: {
-        fontSize: 16,
-        height: 35,
-        flex: 1,
-        marginRight: 10,
-        padding: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+	// GENERAL
+	backgroundImage: {
+		width: '100%',
+		height: '100%',
+	},
+	row: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		width: '100%',
+	},
+	justifyBetween: {
+		justifyContent: 'space-between',
+	},
+	justifyAround: {
+		justifyContent: 'space-around',
+	},
+	h1: {
+		fontSize: 32,
+		textTransform: 'uppercase',
+		color: colors.white,
+	},
+	h2: {
+		fontSize: 24,
+		textTransform: 'capitalize',
+		color: colors.gold,
+	},
+	btn: {
+		borderRadius: 5,
+		elevation: 1,
+		borderRadius: 5,
+		borderWidth: 2,
+		borderColor: colors.gold,
+	},
+	btnSmall: {
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+	},
+	btnLarge: {
+		paddingHorizontal: 16,
+		paddingVertical: 8,
+	},
+	btnInfo: {
+		backgroundColor: colors.black,
+	},
+	btnDanger: {
+		backgroundColor: colors.red,
+	},
+	btnWarning: {
+		backgroundColor: colors.gold,
+	},
+	strong: {
+		fontWeight: 'bold',
+	},
+	em: {
+		fontStyle: 'italic',
+	},
+	textLight: {
+		color: colors.white,
+	},
+	textDanger: {
+		color: colors.red,
+	},
+
+	// BODY
+	body: {
+		flex: 1,
+		paddingTop: 40,
+		paddingBottom: 10,
+		paddingRight: 10,
+		paddingLeft: 10,
+	},
+
+	// HEADER
+	header: {
+		flex: 1.5,
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		// backgroundColor: 'green',
+	},
+	addInput: {
+		backgroundColor: colors.white,
+		flex: 1,
+		marginRight: 10,
+		paddingVertical: 4,
+		paddingHorizontal: 8,
+		borderRadius: 5,
+		borderWidth: 4,
+		borderColor: colors.black,
+	},
+
+	// MAIN
+	main: {
+		flex: 5,
+		backgroundColor: colors.black,
+		opacity: 0.9,
+		marginVertical: 10,
+	},
+	headerComponent: {},
+
+	// FOOTER
+	footer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		//backgroundColor: 'purple',
+	},
 });
