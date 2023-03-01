@@ -9,7 +9,7 @@ const colors = {
     black: '#333333',
     white: '#F1F1F1',
     blue: '#0000FF',
-    red: 'salmon',
+    red: '#FA8072',
     gold: '#FFD700',
     transparent: 'transparent',
     grey: "#777777"
@@ -116,7 +116,7 @@ function Task({ i, task, deleteOneTask, editOneTask }) {
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalTextEdit}>
+                            <Text style={[styles.modalText]}>
                                 Vous êtes sur le point de modifier une tâche.
                             </Text>
                             <TextInput
@@ -160,7 +160,7 @@ function Task({ i, task, deleteOneTask, editOneTask }) {
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalTextEdit}>
+                            <Text style={[styles.modalText]}>
                                 Souhaitez-vous réellement supprimer votre tâche ?
                             </Text>
                             <View style={[styles.row, styles.justifyAround]}>
@@ -196,10 +196,6 @@ export default Task;
 const styles = StyleSheet.create({
 
     // GENERAL
-    backgroundImage: {
-        width: '100%',
-        height: '100%',
-    },
     row: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -211,16 +207,6 @@ const styles = StyleSheet.create({
     justifyAround: {
         justifyContent: 'space-around',
     },
-    h1: {
-        fontSize: 32,
-        textTransform: 'uppercase',
-        color: colors.white,
-    },
-    h2: {
-        fontSize: 24,
-        textTransform: 'capitalize',
-        color: colors.gold,
-    },
     input: {
         backgroundColor: colors.white,
         marginBottom: 15,
@@ -229,7 +215,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         borderRadius: 5,
         borderWidth: 4,
-        borderColor: colors.black,
+        borderColor: colors.grey,
+        fontStyle: "italic"
     },
     btn: {
         borderRadius: 5,
@@ -249,9 +236,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 8,
     },
-    btnInfo: {
-        backgroundColor: colors.black,
-    },
     btnDanger: {
         backgroundColor: colors.red,
     },
@@ -261,54 +245,8 @@ const styles = StyleSheet.create({
     btnSecondary: {
         backgroundColor: colors.grey,
     },
-    strong: {
-        fontWeight: 'bold',
-    },
-    em: {
-        fontStyle: 'italic',
-    },
-    textLight: {
-        color: colors.white,
-    },
-    textDanger: {
-        color: colors.red,
-    },
 
-    // BODY
-    body: {
-        flex: 1,
-        paddingTop: 40,
-        paddingBottom: 10,
-        paddingRight: 10,
-        paddingLeft: 10,
-    },
-
-    // HEADER
-    header: {
-        flex: 1.5,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        // backgroundColor: 'green',
-    },
-
-    // MAIN
-    main: {
-        flex: 5,
-        backgroundColor: colors.black,
-        opacity: 0.9,
-        marginVertical: 10,
-    },
-    headerComponent: {},
-
-    // FOOTER
-    footer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        //backgroundColor: 'purple',
-    },
-
-    // Modal
+    // MODAL
     centeredView: {
         flex: 1,
         justifyContent: 'center',
@@ -337,27 +275,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
-    modalTextEdit: {
+    modalText: {
         marginBottom: 15,
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 18,
         color: colors.white,
-    },
-    modalTextDelete: {
-        marginBottom: 15,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: colors.black,
-    },
-    inputAdd: {
-        height: 40,
-        borderWidth: 2,
-        borderColor: 'black',
-        padding: 10,
-        flex: 1,
-        marginRight: 10,
-        backgroundColor: 'white',
     },
 });

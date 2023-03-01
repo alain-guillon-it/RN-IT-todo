@@ -46,9 +46,10 @@ const colors = {
     black: '#333333',
     white: '#F1F1F1',
     blue: '#0000FF',
-    red: 'salmon',
+    red: '#FA8072',
     gold: '#FFD700',
     transparent: 'transparent',
+    grey: "#777777"
 };
 
 // STEP 5
@@ -157,7 +158,6 @@ export default function App() {
                                 }}
                                 renderItem={({item, index}) => (
                                     <Task
-                                        key={ index }
                                         i={ index }
                                         task={ item }
                                         deleteOneTask={ fct_DeleteOneTask }
@@ -236,9 +236,6 @@ const styles = StyleSheet.create({
     justifyBetween: {
         justifyContent: 'space-between',
     },
-    justifyAround: {
-        justifyContent: 'space-around',
-    },
     h1: {
         fontSize: 32,
         textTransform: 'uppercase',
@@ -265,29 +262,12 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: colors.gold,
     },
-    btnText: {
-        textTransform: 'uppercase',
-        fontWeight: 'bold',
-    },
-    btnSmall: {
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-    },
     btnLarge: {
         paddingHorizontal: 16,
         paddingVertical: 8,
     },
     btnInfo: {
         backgroundColor: colors.black,
-    },
-    btnDanger: {
-        backgroundColor: colors.red,
-    },
-    btnWarning: {
-        backgroundColor: colors.gold,
-    },
-    btnSecondary: {
-        backgroundColor: colors.grey,
     },
     strong: {
         fontWeight: 'bold',
@@ -316,7 +296,6 @@ const styles = StyleSheet.create({
         flex: 1.5,
         alignItems: 'center',
         justifyContent: 'space-around',
-        // backgroundColor: 'green',
     },
 
     // MAIN
@@ -326,66 +305,11 @@ const styles = StyleSheet.create({
         opacity: 0.9,
         marginVertical: 10,
     },
-    headerComponent: {},
 
     // FOOTER
     footer: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-around',
-        //backgroundColor: 'purple',
-    },
-
-    // Modal
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalView: {
-        marginHorizontal: 32,
-        opacity: 0.969,
-        borderRadius: 5,
-        paddingHorizontal: 35,
-        paddingVertical: 50,
-        alignItems: 'center',
-        shadowColor: colors.black,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        backgroundColor: '#000000',
-    },
-
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    modalTextEdit: {
-        marginBottom: 15,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: colors.white,
-    },
-    modalTextDelete: {
-        marginBottom: 15,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: colors.black,
-    },
-    inputAdd: {
-        height: 40,
-        borderWidth: 2,
-        borderColor: 'black',
-        padding: 10,
-        flex: 1,
-        marginRight: 10,
-        backgroundColor: 'white',
     },
 });
