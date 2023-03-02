@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         flex: 1,
         marginRight: 10,
-        paddingVertical: 12,
+        paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 5,
         borderWidth: 4,
